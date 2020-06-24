@@ -1,6 +1,7 @@
 package test
 
 import (
+	"eagle/file"
 	"fmt"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
@@ -10,6 +11,10 @@ import (
 	"strings"
 	"testing"
 )
+
+var scanFileArr = []string{}
+
+
 
 func TestExist(t *testing.T) {
 	appfs := afero.NewOsFs()
@@ -71,8 +76,49 @@ func TestAferoWalk(t *testing.T) {
 		}
 		if(strings.Contains(path, ".xml") && !strings.Contains(path, "pom.xml")){
 			fmt.Println(path, info.Size())
+			scanFileArr = append(scanFileArr, path)
 		}
 		return nil
 	})
+	log.Println("file array ", scanFileArr)
+
+
 	assert.Nil(t, err)
+}
+
+/**
+* 文件包含内容
+ */
+func TestFileContains(t *testing.T)  {
+
+	appfs := afero.NewOsFs()
+
+	path := "/Users/zhangjin/Project/user-center/ucenter-common/src/main/resources/com/yzf/ucenter/common/mapper/UserExtraInfoDAO.xml"
+	bytePath := []byte("mybatis")
+	exist,er := afero.FileContainsBytes(appfs, path, bytePath)
+
+	if er !=nil{
+
+	}
+	assert.Equal(t,exist, true)
+}
+
+func TestXmlscan(t *testing.T)  {
+	projectPath := "/Users/zhangjin/Project/user-center"
+	file.Xmlscan(projectPath)
+}
+
+func TestFileReadAt(t *testing.T)  {
+	appfs := afero.NewOsFs()
+	fileByte, _ := afero.ReadFile(appfs, "/Users/zhangjin/Project/user-center/ucenter-common/src/main/resources/com/yzf/ucenter/common/mapper/UserExtraInfoDAO.xml")
+	fileString :=string(fileByte)
+	log.Println(fileString)
+}
+
+func TestFileLine(t *testing.T)  {
+	appfs := afero.NewOsFs()
+	fileByte, _ := afero.ReadFile(appfs, "/Users/zhangjin/Project/user-center/ucenter-common/src/main/resources/com/yzf/ucenter/common/mapper/UserExtraInfoDAO.xml")
+	fileString :=string(fileByte)
+	fileLineMap := file.BuildFileLineMap(fileString)
+	fmt.Println(fileLineMap)
 }
