@@ -1,7 +1,7 @@
 package file
 
 import (
-	"github.com/prometheus/common/log"
+	"log"
 	"github.com/spf13/afero"
 	"os"
 	"strings"
@@ -36,7 +36,7 @@ func Xmlscan(projectPath string) {
 		return nil
 	})
 	if err != nil {
-		log.Error("😂 scanner error, may be you should try the correct path")
+		log.Fatal("😂 scanner error, may be you should try the correct path")
 		return
 	}
 
@@ -44,12 +44,12 @@ func Xmlscan(projectPath string) {
 	scanFileArr = filter(scanFileArr, filterMybatisFiles)
 
 	for _,path  := range scanFileArr{
-		log.Info(path)
+		log.Println(path)
 		//KeyWordParse(, path)
 		mybatisXmlFile := afero.NewOsFs()
 		fileBytes,err := afero.ReadFile(mybatisXmlFile, path)
 		if err != nil {
-			log.Error("😂 xml file read error !")
+			log.Println("😂 xml file read error !")
 			return
 		}
 		fileContent := string(fileBytes)
@@ -57,7 +57,7 @@ func Xmlscan(projectPath string) {
 		fileLineMap := BuildFileLineMap(fileContent)
 		//关键字收集日志
 		logInfoList = append(logInfoList, KeyWordParse(fileLineMap, path)...)
-		log.Info(logInfoList)
+		log.Println(logInfoList)
 	}
 }
 
@@ -70,7 +70,7 @@ func filterMybatisFiles(filePath string) bool {
 	exist, er := afero.FileContainsBytes(appfs, filePath, bytePath)
 
 	if er != nil {
-		log.Error("afero filer scan error")
+		log.Fatal("afero filer scan error")
 	}
 	return exist
 }
@@ -78,7 +78,7 @@ func filterMybatisFiles(filePath string) bool {
 //构建文件的 行号跟内容的map
 func BuildFileLineMap(fileContent string) map[int]string {
 	if len(fileContent) <= 0 {
-		log.Error("scan file cannot empty")
+		log.Fatal("scan file cannot empty")
 	}
 
 	fileLineMap := map[int]string{}
