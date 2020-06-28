@@ -14,7 +14,7 @@
 
   <!-- 根据主键查询 -->
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select
+    select using
       <include refid="Base_Column_List" />
     from
       rpt_area

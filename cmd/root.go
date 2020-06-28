@@ -18,7 +18,6 @@ package cmd
 import (
 	"eagle/file"
 	"fmt"
-	"github.com/prometheus/common/log"
 	"github.com/spf13/cobra"
 	"os"
 
@@ -45,18 +44,15 @@ to quickly create a Cobra application.`,
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		path := cmd.Flag("path").Value.String();
+		path := cmd.Flag("path").Value.String()
 
 		//如果不传直接当前目录找
 		if len(path) >0 {
-			log.Info("path:", path)
 			file.Xmlscan(path)
 		}else {
 			dir,_ :=os.Getwd()
-			log.Info("dir:", dir)
 			file.Xmlscan(dir)
 		}
-
 	},
 }
 

@@ -57,6 +57,7 @@ func Xmlscan(projectPath string) {
 		fileLineMap := BuildFileLineMap(fileContent)
 		//关键字收集日志
 		logInfoList = append(logInfoList, KeyWordParse(fileLineMap, path)...)
+		log.Info(logInfoList)
 	}
 }
 

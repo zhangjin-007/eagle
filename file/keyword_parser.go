@@ -1,5 +1,6 @@
 package file
 
+import "strings"
 
 var keyWordArr = []string{"using","rand()", "union", "select *", "*"}
 
@@ -21,7 +22,7 @@ func KeyWordParse(fileMap map[int]string, fileName string) []LogInfo {
 
 func contains(a []string, x string) (bool, string)  {
 	for _, n := range a {
-		if x == n {
+		if strings.Contains(x, n) {
 			return true,x
 		}
 	}
