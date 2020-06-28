@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yzf.octopus.designer.dao.RptBoxMapper">
+  <resultMap id="BaseResultMap" type="com.yzf.octopus.beans.report.design.RptBox">
+    <id column="box_id" jdbcType="BIGINT" property="boxId" />
+    <result column="system_id" jdbcType="BIGINT" property="systemId" />
+    <result column="box_name" jdbcType="VARCHAR" property="boxName" />
+    <result column="box_desc" jdbcType="VARCHAR" property="boxDesc" />
+    <result column="show_type" jdbcType="INTEGER" property="showType" />
+    <result column="use_flag" jdbcType="BIT" property="useFlag" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="upd_time" jdbcType="TIMESTAMP" property="updTime" />
+    <result column="upd_user" jdbcType="VARCHAR" property="updUser" />
+    <result column="del_flag" jdbcType="BIT" property="delFlag" />
+    <result column="v_version" property="vVersion" jdbcType="BIGINT" />
+    <!-- add by zhengyang 2019.05.09-->
+    <result column="box_area" jdbcType="VARCHAR" property="boxArea" />
+    <result column="is_parent" jdbcType="SMALLINT" property="isParent" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="risk_relation_boxid" property="riskRelationBoxid" jdbcType="BIGINT" />
+    <result column="isDraft" property="isDraft" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    box_id, system_id, box_name, box_desc, show_type, use_flag, create_time, create_user, 
+    upd_time, upd_user, del_flag,risk_relation_boxid,box_area,is_parent,parent_id,nickname
+  </sql>
+
+  <select id="selectByParentIdAndArea" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rpt_box
+    where parent_id = #{boxId,jdbcType=BIGINT} and box_area = #{areaId,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectAllChildBoxByParentId" resultType="java.lang.String">
+    select
+    box_id
+    from rpt_box
+    where parent_id = #{boxId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from rpt_box
+    where box_id = #{boxId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByRiskBoxid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rpt_box
+    where risk_relation_boxid = #{riskBoxid,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByBoxName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+        <include refid="Base_Column_List" />
+    from
+        rpt_box
+    where
+        box_name = #{boxName,jdbcType=BIGINT}
+        and (del_flag !=1 or del_flag is null)
+  </select>
+
+  <select id="selectBoxByNameAndSystemId" resultType="java.lang.Integer">
+    select
+      count(1)
+    from
+        rpt_box
+    where
+        box_name = #{boxName}
+        and system_id = #{systemId}
+        and (del_flag != 1 or del_flag is null)
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from rpt_box
+    where box_id = #{boxId,jdbcType=BIGINT}
+  </delete>
+
+  <!-- 插入表套 -->
+  <insert id="insert" parameterType="com.yzf.octopus.beans.report.design.RptBox">
+    insert into rpt_box(
+      box_id, system_id, box_name,
+      box_desc, show_type, use_flag, 
+      create_time, create_user, upd_time, 
+      upd_user, del_flag,
+      box_area,is_parent,parent_id,nickname
+    )values(
+      #{boxId,jdbcType=BIGINT}, #{systemId,jdbcType=BIGINT}, #{boxName,jdbcType=VARCHAR},
+      #{boxDesc,jdbcType=VARCHAR}, #{showType,jdbcType=INTEGER}, #{useFlag,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{updTime,jdbcType=TIMESTAMP},
+      #{updUser,jdbcType=VARCHAR}, #{delFlag,jdbcType=BIT},
+      #{boxArea,jdbcType=VARCHAR}, #{isParent,jdbcType=SMALLINT}, #{parentId,jdbcType=BIGINT},
+      #{nickname,jdbcType=VARCHAR}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yzf.octopus.beans.report.design.RptBox">
+    insert into rpt_box
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="boxId != null">
+        box_id,
+      </if>
+      <if test="systemId != null">
+        system_id,
+      </if>
+      <if test="boxName != null">
+        box_name,
+      </if>
+      <if test="boxDesc != null">
+        box_desc,
+      </if>
+      <if test="showType != null">
+        show_type,
+      </if>
+      <if test="useFlag != null">
+        use_flag,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updTime != null">
+        upd_time,
+      </if>
+      <if test="updUser != null">
+        upd_user,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+      <!-- add by zhengyang 2020.03.09-->
+      <if test="boxArea != null">
+        box_area,
+      </if>
+      <if test="isParent != null">
+        is_parent,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="boxId != null">
+        #{boxId,jdbcType=BIGINT},
+      </if>
+      <if test="systemId != null">
+        #{systemId,jdbcType=BIGINT},
+      </if>
+      <if test="boxName != null">
+        #{boxName,jdbcType=VARCHAR},
+      </if>
+      <if test="boxDesc != null">
+        #{boxDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="showType != null">
+        #{showType,jdbcType=INTEGER},
+      </if>
+      <if test="useFlag != null">
+        #{useFlag,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updTime != null">
+        #{updTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updUser != null">
+        #{updUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <!-- add by zhengyang 2020.03.09-->
+      <if test="boxArea != null">
+        #{boxArea,jdbcType=VARCHAR},
+      </if>
+      <if test="isParent != null">
+        #{isParent,jdbcType=SMALLINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yzf.octopus.beans.report.design.RptBox">
+    update rpt_box
+    <set>
+      <if test="systemId != null">
+        system_id = #{systemId,jdbcType=BIGINT},
+      </if>
+      <if test="boxName != null">
+        box_name = #{boxName,jdbcType=VARCHAR},
+      </if>
+      <if test="boxDesc != null">
+        box_desc = #{boxDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="showType != null">
+        show_type = #{showType,jdbcType=INTEGER},
+      </if>
+      <if test="useFlag != null">
+        use_flag = #{useFlag,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updTime != null">
+        upd_time = #{updTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updUser != null">
+        upd_user = #{updUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="riskRelationBoxid != null">
+        risk_relation_boxid = #{riskRelationBoxid,jdbcType=BIT},
+      </if>
+      <!-- add by zhengyang 2019.05.09-->
+      <if test="boxArea != null">
+        box_area = #{boxArea,jdbcType=VARCHAR},
+      </if>
+      <if test="isParent != null">
+        is_parent = #{isParent,jdbcType=SMALLINT},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where box_id = #{boxId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yzf.octopus.beans.report.design.RptBox">
+    update rpt_box
+    set system_id = #{systemId,jdbcType=BIGINT},
+      box_name = #{boxName,jdbcType=VARCHAR},
+      box_desc = #{boxDesc,jdbcType=VARCHAR},
+      show_type = #{showType,jdbcType=INTEGER},
+      use_flag = #{useFlag,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      upd_time = #{updTime,jdbcType=TIMESTAMP},
+      upd_user = #{updUser,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=BIT}
+    where box_id = #{boxId,jdbcType=BIGINT}
+  </update>
+
+  <select id="countByPage" resultType="java.lang.Long">
+    select
+      count(1)
+    from
+      rpt_box box left JOIN box_template temp on box.box_id = temp.box_id
+    WHERE
+      1=1 and(
+        box.box_name LIKE concat('%',#{rptBoxName,jdbcType=VARCHAR},'%') OR
+        box.box_id = #{rptBoxName,jdbcType=BIGINT}
+      )
+      <if test="systemId != null and systemId != 0">
+        and box.system_id = #{systemId,jdbcType=BIGINT}
+      </if>
+      <if test="boxArea != null and boxArea != 0">
+        and box.box_area = #{boxArea,jdbcType=VARCHAR}
+      </if>
+      and temp.del_flag = 0  order by box.box_id DESC,temp.v_version DESC
+  </select>
+
+  <select id="findByPage" resultMap="BaseResultMap">
+    select
+      box.box_id, box.system_id, box.box_name,
+      box.box_desc, box.show_type, box.use_flag,
+      box.create_time, box.create_user, box.upd_time,
+      box.upd_user,temp.v_version,temp.del_flag,
+      box.box_area,box.is_parent,box.parent_id,box.nickname,
+      IF(rbd.box_id is null,'0','1') isDraft
+    from
+      rpt_box box left JOIN box_template temp on box.box_id = temp.box_id
+      left join rpt_box_draft rbd on box.box_id = rbd.box_id
+    WHERE
+      1=1 and(
+        box.box_name LIKE concat('%',#{rptBoxName,jdbcType=VARCHAR},'%') OR
+        box.box_id = #{rptBoxName,jdbcType=BIGINT}
+      )
+      <if test="systemId != null and systemId != 0">
+        and box.system_id = #{systemId,jdbcType=BIGINT}
+      </if>
+      <if test="boxArea != null and boxArea != 0">
+        and box.box_area = #{boxArea,jdbcType=VARCHAR}
+      </if>
+      and temp.del_flag = 0  order by box.box_id DESC,temp.v_version DESC
+  </select>
+
+  <select id="findAllParentBox" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      rpt_box
+    WHERE
+      is_parent = 1 and (del_flag != 1 or del_flag is null)
+      <if test="systemId != null">
+        and system_id = #{systemId,jdbcType=BIGINT}
+      </if>
+      <if test="boxName != null">
+        and box_name LIKE concat('%',#{boxName,jdbcType=VARCHAR},'%')
+      </if>
+      order by box_id DESC
+  </select>
+
+</mapper>

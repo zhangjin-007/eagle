@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yzf.octopus.designer.dao.RptAreaMapper">
+
+  <resultMap id="BaseResultMap" type="com.yzf.octopus.beans.report.design.RptArea">
+    <id column="area_id" jdbcType="VARCHAR" property="areaId" />
+    <result column="area_name" jdbcType="VARCHAR" property="areaName" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    area_id, area_name, parent_id, status
+  </sql>
+
+  <!-- 根据主键查询 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      rpt_area
+    where
+      area_id = #{rptId,jdbcType=VARCHAR}
+      and status = '1'
+  </select>
+
+  <!-- 查询地区 -->
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      rpt_area
+    where
+      status = '1'
+  </select>
+</mapper>

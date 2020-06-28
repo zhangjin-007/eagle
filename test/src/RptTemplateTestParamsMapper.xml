@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzf.octopus.designer.dao.RptTemplateTestParamsMapper" >
+  <resultMap id="BaseResultMap" type="com.yzf.octopus.beans.report.design.BoxTemplateTestParams" >
+    <result column="testparams_id" property="testparamsId" jdbcType="BIGINT" />
+    <result column="box_id" property="boxId" jdbcType="BIGINT" />
+    <result column="v_version" property="vVersion" jdbcType="BIGINT" />
+    <result column="ztdm" property="ztdm" jdbcType="VARCHAR" />
+    <result column="qyid" property="qyId" jdbcType="VARCHAR" />
+    <result column="kjnd_start" property="kjndStart" jdbcType="BIGINT" />
+    <result column="kjnd_end" property="kjndEnd" jdbcType="BIGINT" />
+    <result column="kjqj_start" property="kjqjStart" jdbcType="BIGINT" />
+    <result column="kjqj_end" property="kjqjEnd" jdbcType="BIGINT" />
+  </resultMap>
+
+
+
+  <sql id="Base_Column_List">
+   testparams_id,box_id,v_version,ztdm,qyid,kjnd_start,kjnd_end,kjqj_start,kjqj_end
+  </sql>
+
+
+  <insert id="insert" parameterType="com.yzf.octopus.beans.report.design.BoxTemplateTestParams" >
+      insert into rpt_box_test_params (testparams_id, box_id, v_version,ztdm, qyid, kjnd_start,kjnd_end, kjqj_start,kjqj_end)
+      values (#{testparamsId,jdbcType=BIGINT}, #{boxId,jdbcType=BIGINT}, #{vVersion,jdbcType=BIGINT},
+      #{ztdm,jdbcType=VARCHAR},#{qyId,jdbcType=VARCHAR}, #{kjndStart,jdbcType=BIGINT}, #{kjndEnd,jdbcType=BIGINT},
+      #{kjqjStart,jdbcType=BIGINT}, #{kjqjEnd,jdbcType=BIGINT}
+      )
+  </insert>
+
+    <update id="updateByBoxId" parameterType="com.yzf.octopus.beans.report.design.BoxTemplateTestParams">
+        update rpt_box_test_params
+        <set>
+            v_version =  #{vVersion,jdbcType=BIGINT},
+            ztdm = #{ztdm,jdbcType=VARCHAR},
+            qyid = #{qyId,jdbcType=VARCHAR},
+            kjnd_start = #{kjndStart,jdbcType=BIGINT},
+            kjnd_end = #{kjndEnd,jdbcType=BIGINT},
+            kjqj_start = #{kjqjStart,jdbcType=BIGINT},
+            kjqj_end = #{kjqjEnd,jdbcType=BIGINT}
+        </set>
+        where box_id = #{boxId,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="getParamsByBoxId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List" />
+        from rpt_box_test_params f where f.box_id = #{boxId,jdbcType=BIGINT}
+    </select>
+
+
+    <delete id="deleteByBoxId" parameterType="java.lang.Long">
+        delete from rpt_box_test_params
+        where box_id = #{boxId,jdbcType=BIGINT}
+    </delete>
+
+
+
+</mapper>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzf.octopus.designer.dao.BoxTemplateMapper" >
+  <resultMap id="BaseResultMap" type="com.yzf.octopus.beans.report.design.BoxTemplate" >
+    <result column="template_id" property="templateId" jdbcType="BIGINT" />
+    <result column="box_id" property="boxId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="upd_time" property="updTime" jdbcType="TIMESTAMP" />
+    <result column="upd_user" property="updUser" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="BIT" />
+    <result column="edit_flag" property="editFlag" jdbcType="BIT" />
+    <result column="review_flag" property="reviewFlag" jdbcType="BIT" />
+    <result column="publish_flag" property="publishFlag" jdbcType="BIT" />
+    <result column="v_version" property="vVersion" jdbcType="BIGINT" />
+    <result column="template_text" property="templateText" jdbcType="LONGVARCHAR" />
+    <result column="effective_time_begin" property="effectiveTimeBegin" jdbcType="TIMESTAMP" />
+    <result column="effective_time_end" property="effectiveTimeEnd" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yzf.octopus.beans.report.design.BoxTemplate" extends="BaseResultMap" >
+    <result column="template_text" property="templateText" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+  <resultMap id="TemplateMap" type="com.yzf.octopus.beans.report.design.dto.BoxTemplateDto" >
+    <result column="template_id" property="templateId" jdbcType="BIGINT" />
+    <result column="box_id" property="boxId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="upd_time" property="updTime" jdbcType="TIMESTAMP" />
+    <result column="upd_user" property="updUser" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="BIT" />
+    <result column="edit_flag" property="editFlag" jdbcType="BIT" />
+    <result column="review_flag" property="reviewFlag" jdbcType="BIT" />
+    <result column="publish_flag" property="publishFlag" jdbcType="BIT" />
+    <result column="v_version" property="vVersion" jdbcType="BIGINT" />
+    <result column="template_text" property="templateText" jdbcType="LONGVARCHAR" />
+    <result column="system_id" property="systemId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Blob_Column_List" >
+    template_text
+  </sql>
+  <sql id="Base_Column_List">
+    template_id, box_id, create_time, create_user,
+    upd_time, upd_user, del_flag,edit_flag,review_flag,publish_flag,v_version,template_text,
+    effective_time_begin,effective_time_end
+  </sql>
+  <delete id="deleteByBoxId" parameterType="java.lang.Long">
+    delete from box_template
+    where box_id = #{boxId,jdbcType=BIGINT}
+  </delete>
+
+  <select id="selectByBoxId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      box_template
+    where
+      box_id = #{boxId,jdbcType=BIGINT}
+  </select>
+
+  <select id="getCountByBoxIdAndVersion" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    select
+        count(1)
+    from
+        box_template
+    where
+        box_id = #{boxId,jdbcType=BIGINT}
+        and v_version != #{vVersion,jdbcType=BIGINT}
+        and (del_flag != 1 or del_flag is null)
+  </select>
+
+  <select id="getAllVersionByBoxId" parameterType="java.lang.Long" resultType="java.lang.String">
+    SELECT CAST(v_version AS CHAR) from box_template
+    where
+    box_id = #{boxId,jdbcType=BIGINT}
+  </select>
+
+
+  <select id="selectByBoxIdAndVersion" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      box_template
+    where
+      box_id = #{boxId,jdbcType=BIGINT}
+      and v_version = #{vVersion,jdbcType=BIGINT}
+  </select>
+
+  <select id="getTplByVersion" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from box_template
+    where box_id = #{boxId,jdbcType=BIGINT} and v_version = #{version,jdbcType=BIGINT}
+  </select>
+
+  <select id="getTplMaxVersion" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from box_template
+    where box_id = #{boxId,jdbcType=BIGINT} and v_version in(select max(v_version) from box_template where box_id =
+    #{boxId,jdbcType=BIGINT});
+  </select>
+
+  <!-- 查询最大版本号 -->
+  <select id="getMaxVersion" parameterType="java.util.Map" resultType="Long">
+    select
+      max(v_version) vVersion
+    from
+      box_template
+    where
+      box_id = #{boxId,jdbcType=BIGINT}
+  </select>
+
+  <!--批量查询-->
+  <select id="selectTplByBoxIds"  parameterType="java.util.List" resultMap="TemplateMap">
+      select DISTINCT box.box_id as box_id,
+        template.template_id as template_id,
+        box.create_time as create_time,
+        box.create_user as create_user,
+        box.upd_time as upd_time,
+        box.upd_user as upd_user,
+        max(template.v_version) as v_version,
+        box.system_id as system_id,
+        template.template_text as template_text
+      FROM yzf_octopus.rpt_box box LEFT JOIN yzf_octopus.box_template template
+        on box.box_id = template.box_id
+      where box.box_id in
+      <foreach item="item" collection="list" separator="," open="(" close=")" index="">
+        #{item, jdbcType=BIGINT}
+      </foreach>
+       GROUP BY box.box_id;
+  </select>
+
+  <update id="updateBoxTemplate" parameterType="com.yzf.octopus.beans.report.design.BoxTemplate">
+    UPDATE  box_template set
+    upd_time = #{updTime,jdbcType=TIMESTAMP},
+    upd_user = #{updUser,jdbcType=VARCHAR},
+    del_flag = #{delFlag,jdbcType=BIT},
+    template_text = #{templateText,jdbcType=LONGVARCHAR},effective_time_begin=#{effectiveTimeBegin,jdbcType=TIMESTAMP},effective_time_end=#{effectiveTimeEnd,jdbcType=TIMESTAMP}
+    where box_id = #{boxId,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateBoxTemplateByVersion" parameterType="com.yzf.octopus.beans.report.design.BoxTemplate">
+    UPDATE  box_template set
+    upd_time = #{updTime,jdbcType=TIMESTAMP},
+    upd_user = #{updUser,jdbcType=VARCHAR},
+    del_flag = #{delFlag,jdbcType=BIT},
+    template_text = #{templateText,jdbcType=LONGVARCHAR},effective_time_begin=#{effectiveTimeBegin,jdbcType=DATE},effective_time_end=#{effectiveTimeEnd,jdbcType=DATE}
+    where box_id = #{boxId,jdbcType=BIGINT} and v_version = #{vVersion,jdbcType=BIGINT}
+  </update>
+
+
+  <insert id="insert" parameterType="com.yzf.octopus.beans.report.design.BoxTemplate" >
+    insert into box_template (template_id, box_id, create_time, 
+      create_user, upd_time, upd_user, 
+      del_flag, edit_flag, review_flag, 
+      publish_flag, v_version, template_text,effective_time_begin,effective_time_end
+      )
+    values (#{templateId,jdbcType=BIGINT}, #{boxId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{updTime,jdbcType=TIMESTAMP}, #{updUser,jdbcType=VARCHAR},
+      #{delFlag,jdbcType=BIT}, #{editFlag,jdbcType=BIT}, #{reviewFlag,jdbcType=BIT}, 
+      #{publishFlag,jdbcType=BIT}, #{vVersion,jdbcType=BIGINT}, #{templateText,jdbcType=LONGVARCHAR}, #{effectiveTimeBegin,jdbcType=DATE}, #{effectiveTimeEnd,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yzf.octopus.beans.report.design.BoxTemplate" >
+    insert into box_template
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="templateId != null" >
+        template_id,
+      </if>
+      <if test="boxId != null" >
+        box_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updTime != null" >
+        upd_time,
+      </if>
+      <if test="updUser != null" >
+        upd_user,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="editFlag != null" >
+        edit_flag,
+      </if>
+      <if test="reviewFlag != null" >
+        review_flag,
+      </if>
+      <if test="publishFlag != null" >
+        publish_flag,
+      </if>
+      <if test="vVersion != null" >
+        v_version,
+      </if>
+      <if test="templateText != null" >
+        template_text,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="templateId != null" >
+        #{templateId,jdbcType=BIGINT},
+      </if>
+      <if test="boxId != null" >
+        #{boxId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updTime != null" >
+        #{updTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updUser != null" >
+        #{updUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="editFlag != null" >
+        #{editFlag,jdbcType=BIT},
+      </if>
+      <if test="reviewFlag != null" >
+        #{reviewFlag,jdbcType=BIT},
+      </if>
+      <if test="publishFlag != null" >
+        #{publishFlag,jdbcType=BIT},
+      </if>
+      <if test="vVersion != null" >
+        #{vVersion,jdbcType=BIGINT},
+      </if>
+      <if test="templateText != null" >
+        #{templateText,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="selectParentTemplateByBoxId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />,
+    max(v_version)
+    from box_template where box_id = (select parent_id from rpt_box where box_id = #{boxId,jdbcType=BIGINT});
+  </select>
+
+
+  <select id="selectChildTemplatesByBoxId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />, max(v_version) from box_template where box_id in (select box_id from rpt_box where
+     parent_id = #{boxId,jdbcType=BIGINT}) group by box_id;
+  </select>
+</mapper>

@@ -21,6 +21,8 @@ func filter(ss []string, test func(string) bool) (ret []string) {
 
 var scanFileArr []string
 
+var logInfoList []LogInfo
+
 //执行xml文件的扫描 walk 方法使用RegexpFs
 func Xmlscan(projectPath string) {
 	appfs := afero.NewOsFs()
@@ -37,17 +39,29 @@ func Xmlscan(projectPath string) {
 		log.Error("😂 scanner error, may be you should try the correct path")
 		return
 	}
-	scanFileArr = filter(scanFileArr, filterMybatisFiles)
 
+	//1.找出所有mybatis文件
+	scanFileArr = filter(scanFileArr, filterMybatisFiles)
 
 	for _,path  := range scanFileArr{
 		log.Info(path)
+		//KeyWordParse(, path)
+		mybatisXmlFile := afero.NewOsFs()
+		fileBytes,err := afero.ReadFile(mybatisXmlFile, path)
+		if err != nil {
+			log.Error("😂 xml file read error !")
+			return
+		}
+		fileContent := string(fileBytes)
+		//构建行号内容map
+		fileLineMap := BuildFileLineMap(fileContent)
+		//关键字收集日志
+		logInfoList = append(logInfoList, KeyWordParse(fileLineMap, path)...)
 	}
-
 }
 
 /**
-过滤操作mybatis的文件
+过滤操作mybatis的文件🚀
 */
 func filterMybatisFiles(filePath string) bool {
 	appfs := afero.NewOsFs()

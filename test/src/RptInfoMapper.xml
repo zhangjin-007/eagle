@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yzf.octopus.designer.dao.RptInfoMapper">
+  <resultMap id="BaseResultMap" type="com.yzf.octopus.beans.report.design.RptInfo">
+    <id column="rpt_id" jdbcType="BIGINT" property="rptId" />
+    <result column="box_id" jdbcType="BIGINT" property="boxId" />
+    <result column="rpt_attr_json" jdbcType="VARCHAR" property="rptAttrJson" />
+    <result column="rpt_name" jdbcType="VARCHAR" property="rptName" />
+    <result column="rpt_desc" jdbcType="VARCHAR" property="rptDesc" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="upd_time" jdbcType="TIMESTAMP" property="updTime" />
+    <result column="upd_user" jdbcType="BIGINT" property="updUser" />
+    <result column="del_flag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rpt_id, box_id, rpt_attr_json, rpt_name, rpt_desc, create_time, create_user, upd_time, 
+    upd_user, del_flag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from rpt_info
+    where rpt_id = #{rptId,jdbcType=BIGINT}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from rpt_info
+    where rpt_id = #{rptId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yzf.octopus.beans.report.design.RptInfo">
+    insert into rpt_info (rpt_id, box_id, rpt_attr_json, 
+      rpt_name, rpt_desc, create_time, 
+      create_user, upd_time, upd_user, 
+      del_flag)
+    values (#{rptId,jdbcType=BIGINT}, #{boxId,jdbcType=BIGINT}, #{rptAttrJson,jdbcType=VARCHAR},
+      #{rptName,jdbcType=VARCHAR}, #{rptDesc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=BIGINT}, #{updTime,jdbcType=TIMESTAMP}, #{updUser,jdbcType=BIGINT}, 
+      #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yzf.octopus.beans.report.design.RptInfo">
+    insert into rpt_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rptId != null">
+        rpt_id,
+      </if>
+      <if test="boxId != null">
+        box_id,
+      </if>
+      <if test="rptAttrJson != null">
+        rpt_attr_json,
+      </if>
+      <if test="rptName != null">
+        rpt_name,
+      </if>
+      <if test="rptDesc != null">
+        rpt_desc,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updTime != null">
+        upd_time,
+      </if>
+      <if test="updUser != null">
+        upd_user,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rptId != null">
+        #{rptId,jdbcType=BIGINT},
+      </if>
+      <if test="boxId != null">
+        #{boxId,jdbcType=BIGINT},
+      </if>
+      <if test="rptAttrJson != null">
+        #{rptAttrJson,jdbcType=VARCHAR},
+      </if>
+      <if test="rptName != null">
+        #{rptName,jdbcType=VARCHAR},
+      </if>
+      <if test="rptDesc != null">
+        #{rptDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updTime != null">
+        #{updTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updUser != null">
+        #{updUser,jdbcType=BIGINT},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yzf.octopus.beans.report.design.RptInfo">
+    update rpt_info
+    <set>
+      <if test="boxId != null">
+        box_id = #{boxId,jdbcType=BIGINT},
+      </if>
+      <if test="rptAttrJson != null">
+        rpt_attr_json = #{rptAttrJson,jdbcType=VARCHAR},
+      </if>
+      <if test="rptName != null">
+        rpt_name = #{rptName,jdbcType=VARCHAR},
+      </if>
+      <if test="rptDesc != null">
+        rpt_desc = #{rptDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updTime != null">
+        upd_time = #{updTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updUser != null">
+        upd_user = #{updUser,jdbcType=BIGINT},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where rpt_id = #{rptId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yzf.octopus.beans.report.design.RptInfo">
+    update rpt_info
+    set box_id = #{boxId,jdbcType=BIGINT},
+      rpt_attr_json = #{rptAttrJson,jdbcType=VARCHAR},
+      rpt_name = #{rptName,jdbcType=VARCHAR},
+      rpt_desc = #{rptDesc,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=BIGINT},
+      upd_time = #{updTime,jdbcType=TIMESTAMP},
+      upd_user = #{updUser,jdbcType=BIGINT},
+      del_flag = #{delFlag,jdbcType=BIT}
+    where rpt_id = #{rptId,jdbcType=BIGINT}
+  </update>
+
+  <insert id="batchInsertRptInfo">
+    insert into rpt_Info (rpt_id,box_id,rpt_attr_json, rpt_name, create_time, create_user, upd_time, upd_user, del_flag)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.rptId},#{item.boxId},#{item.rptAttrJson},#{item.rptName},#{item.createTime},#{item.createUser},#{item.updTime},#{item.updUser},#{item.delFlag})
+    </foreach>
+  </insert>
+
+
+  <delete id="deleteByBoxId" parameterType="java.lang.Long">
+    delete from rpt_Info
+    where box_id = #{boxId,jdbcType=BIGINT}
+  </delete>
+
+  <select id="selectByBoxId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rpt_info
+    where box_id = #{boxId,jdbcType=BIGINT}
+  </select>
+
+</mapper>

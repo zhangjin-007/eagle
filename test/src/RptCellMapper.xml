@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yzf.octopus.designer.dao.RptCellMapper">
+  <resultMap id="BaseResultMap" type="com.yzf.octopus.beans.report.design.RptDesignCell">
+    <id column="cell_id" jdbcType="BIGINT" property="cellId" />
+    <result column="rpt_id" jdbcType="BIGINT" property="rptId" />
+    <result column="cell_row" jdbcType="INTEGER" property="cellRow" />
+    <result column="cell_col" jdbcType="INTEGER" property="cellCol" />
+    <result column="cell_attr" jdbcType="VARCHAR" property="cellAttr" />
+    <result column="cell_tag" jdbcType="VARCHAR" property="cellTag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    cell_id, rpt_id, cell_row, cell_col, cell_attr, cell_tag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from rpt_cell
+    where cell_id = #{cellId,jdbcType=BIGINT}
+  </select>
+
+  <!-- 根据RptId查询 -->
+  <select id="selectByRptId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      rpt_cell
+    where rpt_id = #{rptId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from rpt_cell
+    where cell_id = #{cellId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yzf.octopus.beans.report.design.RptDesignCell">
+    insert into rpt_cell (cell_id, rpt_id, cell_row, 
+      cell_col, cell_attr, cell_tag
+      )
+    values (#{cellId,jdbcType=BIGINT}, #{rptId,jdbcType=BIGINT}, #{cellRow,jdbcType=INTEGER}, 
+      #{cellCol,jdbcType=INTEGER}, #{cellAttr,jdbcType=VARCHAR}, #{cellTag,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yzf.octopus.beans.report.design.RptDesignCell">
+    insert into rpt_cell
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cellId != null">
+        cell_id,
+      </if>
+      <if test="rptId != null">
+        rpt_id,
+      </if>
+      <if test="cellRow != null">
+        cell_row,
+      </if>
+      <if test="cellCol != null">
+        cell_col,
+      </if>
+      <if test="cellAttr != null">
+        cell_attr,
+      </if>
+      <if test="cellTag != null">
+        cell_tag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cellId != null">
+        #{cellId,jdbcType=BIGINT},
+      </if>
+      <if test="rptId != null">
+        #{rptId,jdbcType=BIGINT},
+      </if>
+      <if test="cellRow != null">
+        #{cellRow,jdbcType=INTEGER},
+      </if>
+      <if test="cellCol != null">
+        #{cellCol,jdbcType=INTEGER},
+      </if>
+      <if test="cellAttr != null">
+        #{cellAttr,jdbcType=VARCHAR},
+      </if>
+      <if test="cellTag != null">
+        #{cellTag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yzf.octopus.beans.report.design.RptDesignCell">
+    update rpt_cell
+    <set>
+      <if test="rptId != null">
+        rpt_id = #{rptId,jdbcType=BIGINT},
+      </if>
+      <if test="cellRow != null">
+        cell_row = #{cellRow,jdbcType=INTEGER},
+      </if>
+      <if test="cellCol != null">
+        cell_col = #{cellCol,jdbcType=INTEGER},
+      </if>
+      <if test="cellAttr != null">
+        cell_attr = #{cellAttr,jdbcType=VARCHAR},
+      </if>
+      <if test="cellTag != null">
+        cell_tag = #{cellTag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cell_id = #{cellId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yzf.octopus.beans.report.design.RptDesignCell">
+    update rpt_cell
+    set rpt_id = #{rptId,jdbcType=BIGINT},
+      cell_row = #{cellRow,jdbcType=INTEGER},
+      cell_col = #{cellCol,jdbcType=INTEGER},
+      cell_attr = #{cellAttr,jdbcType=VARCHAR},
+      cell_tag = #{cellTag,jdbcType=VARCHAR}
+    where cell_id = #{cellId,jdbcType=BIGINT}
+  </update>
+  <insert id="batchInsertRptCells">
+    insert into rpt_cell (cell_id,rpt_id,cell_row, cell_col, cell_attr, cell_tag)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.cellId},#{item.rptId},#{item.cellRow},#{item.cellCol},#{item.cellAttr},#{item.cellTag})
+    </foreach>
+  </insert>
+
+  <delete id="deleteByRptId" parameterType="java.lang.Long">
+    delete from rpt_cell
+    where rpt_id = #{rptId,jdbcType=BIGINT}
+  </delete>
+
+</mapper>

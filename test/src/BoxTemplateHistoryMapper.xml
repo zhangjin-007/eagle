@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yzf.octopus.designer.dao.BoxTemplateHistoryMapper" >
+
+  <resultMap id="BaseResultMap" type="com.yzf.octopus.beans.report.design.BoxTemplateHistory" >
+    <result column="templatehis_id" property="templatehisId" jdbcType="BIGINT" />
+    <result column="template_id" property="templateId" jdbcType="BIGINT" />
+    <result column="box_id" property="boxId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="upd_time" property="updTime" jdbcType="TIMESTAMP" />
+    <result column="upd_user" property="updUser" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="BIT" />
+    <result column="edit_flag" property="editFlag" jdbcType="BIT" />
+    <result column="review_flag" property="reviewFlag" jdbcType="BIT" />
+    <result column="publish_flag" property="publishFlag" jdbcType="BIT" />
+    <result column="v_version" property="vVersion" jdbcType="BIGINT" />
+  </resultMap>
+
+  <resultMap id="ResultMapWithBLOBs" type="com.yzf.octopus.beans.report.design.BoxTemplateHistory" extends="BaseResultMap" >
+    <result column="template_text" property="templateText" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+  <resultMap id="WithRptBoxResultMap" type="com.yzf.octopus.beans.report.design.BoxTemplateHistory" extends="BaseResultMap">
+    <result column="box_name" property="boxName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    templatehis_id,template_id, box_id, create_time, create_user,
+    upd_time, upd_user, del_flag,edit_flag,review_flag,publish_flag,v_version
+  </sql>
+  <sql id="Blob_Column_List" >
+    template_text
+  </sql>
+
+  <select id="selectByBoxId" parameterType="java.lang.Long" resultMap="WithRptBoxResultMap">
+    select
+      box.box_name,
+      his.templatehis_id,his.template_id, his.box_id, his.create_time, his.create_user,
+      his.upd_time, his.upd_user, his.del_flag,his.edit_flag,his.review_flag,his.publish_flag,his.v_version
+    from
+      rpt_box box left join
+      box_template_history his on box.box_id = his.box_id
+    where
+      box.box_id = #{boxId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByHistoryId" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+      <include refid="Base_Column_List" />,
+      <include refid="Blob_Column_List" />
+    from
+      box_template_history
+    where
+      templatehis_id = #{templatehisId,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.yzf.octopus.beans.report.design.BoxTemplateHistory" >
+    insert into box_template_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="templatehisId != null" >
+        templatehis_id,
+      </if>
+      <if test="templateId != null" >
+        template_id,
+      </if>
+      <if test="boxId != null" >
+        box_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updTime != null" >
+        upd_time,
+      </if>
+      <if test="updUser != null" >
+        upd_user,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="editFlag != null" >
+        edit_flag,
+      </if>
+      <if test="reviewFlag != null" >
+        review_flag,
+      </if>
+      <if test="publishFlag != null" >
+        publish_flag,
+      </if>
+      <if test="vVersion != null" >
+        v_version,
+      </if>
+      <if test="templateText != null" >
+        template_text,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="templatehisId != null" >
+        #{templatehisId,jdbcType=BIGINT},
+      </if>
+      <if test="templateId != null" >
+        #{templateId,jdbcType=BIGINT},
+      </if>
+      <if test="boxId != null" >
+        #{boxId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updTime != null" >
+        #{updTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updUser != null" >
+        #{updUser,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=BIT},
+      </if>
+      <if test="editFlag != null" >
+        #{editFlag,jdbcType=BIT},
+      </if>
+      <if test="reviewFlag != null" >
+        #{reviewFlag,jdbcType=BIT},
+      </if>
+      <if test="publishFlag != null" >
+        #{publishFlag,jdbcType=BIT},
+      </if>
+      <if test="vVersion != null" >
+        #{vVersion,jdbcType=BIGINT},
+      </if>
+      <if test="templateText != null" >
+        #{templateText,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

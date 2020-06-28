@@ -18,6 +18,7 @@ package cmd
 import (
 	"eagle/file"
 	"fmt"
+	"github.com/prometheus/common/log"
 	"github.com/spf13/cobra"
 	"os"
 
@@ -31,8 +32,8 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "eagle",
-	Short: "scan java project for mybtais xml file",
-	Long: `A longer description that spans multiple lines and likely contains
+	Short: "scan java project for mybtais xml file ",
+	Long: `🚀🚀🚀 A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
 
 Cobra is a CLI library for Go that empowers applications.
@@ -45,13 +46,17 @@ to quickly create a Cobra application.`,
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		path := cmd.Flag("path").Value.String();
+
 		//如果不传直接当前目录找
-		dir , _:=homedir.Dir()
-		if len(path) > 0{
+		if len(path) >0 {
+			log.Info("path:", path)
 			file.Xmlscan(path)
 		}else {
+			dir,_ :=os.Getwd()
+			log.Info("dir:", dir)
 			file.Xmlscan(dir)
 		}
+
 	},
 }
 
@@ -72,7 +77,7 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.demo.yaml)")
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "path", "p", "eagle start location")
+	rootCmd.Flags().StringVar(&cfgFile, "path", "", "eagle start location")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
@@ -94,7 +99,7 @@ func initConfig() {
 
 		// Search config in home directory with name ".demo" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".demo")
+		viper.SetConfigName(".eagle")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

@@ -104,7 +104,8 @@ func TestFileContains(t *testing.T)  {
 }
 
 func TestXmlscan(t *testing.T)  {
-	projectPath := "/Users/zhangjin/Project/user-center"
+	//projectPath := "/Users/zhangjin/Project/user-center"
+	projectPath := "/Users/zhangjin/Project/eagle"
 	file.Xmlscan(projectPath)
 }
 
@@ -124,3 +125,21 @@ func TestFileLine(t *testing.T)  {
 		fmt.Println("line: ", line, " content: ", content)
 	}
 }
+
+//测试append
+func TestAppend(t *testing.T)  {
+	logs := []file.LogInfo{}
+	logs = append(logs, file.LogInfo{"x123","123", "123"})
+	logs = append(logs, file.LogInfo{"x123123123","123", "123123123"})
+	var logsFinal = []file.LogInfo{}
+	logsFinal = append(logsFinal, logs...)
+	fmt.Println(logsFinal)
+}
+
+func TestFileReadDir(t *testing.T)  {
+	// using the function
+	mydir, _ := os.Getwd()
+	fmt.Println(mydir)
+}
+
+
