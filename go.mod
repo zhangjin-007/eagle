@@ -3,6 +3,7 @@ module eagle
 go 1.13
 
 require (
+	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/gogo/protobuf v1.2.1
 	github.com/mitchellh/go-homedir v1.1.0

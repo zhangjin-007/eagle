@@ -16,6 +16,7 @@ limitations under the License.
 package cmd
 
 import (
+	"eagle/file"
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"
@@ -39,8 +40,18 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
+	Args: func(cmd *cobra.Command, args []string) error {
+		return nil
+	},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("hello")
+		path := cmd.Flag("path").Value.String();
+		//如果不传直接当前目录找
+		dir , _:=homedir.Dir()
+		if len(path) > 0{
+			file.Xmlscan(path)
+		}else {
+			file.Xmlscan(dir)
+		}
 	},
 }
 
@@ -61,10 +72,11 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.demo.yaml)")
-
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "path", "p", "eagle start location")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
 }
 
 // initConfig reads in config file and ENV variables if set.

@@ -9,7 +9,7 @@ import (
 
 /**
 过滤
-*/
+ */
 func filter(ss []string, test func(string) bool) (ret []string) {
 	for _, s := range ss {
 		if test(s) {
@@ -19,7 +19,7 @@ func filter(ss []string, test func(string) bool) (ret []string) {
 	return
 }
 
-var scanFileArr = []string{}
+var scanFileArr []string
 
 //执行xml文件的扫描 walk 方法使用RegexpFs
 func Xmlscan(projectPath string) {
@@ -34,7 +34,8 @@ func Xmlscan(projectPath string) {
 		return nil
 	})
 	if err != nil {
-		log.Error("scanner error")
+		log.Error("😂 scanner error, may be you should try the correct path")
+		return
 	}
 	scanFileArr = filter(scanFileArr, filterMybatisFiles)
 
