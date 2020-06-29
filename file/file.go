@@ -45,7 +45,6 @@ func Xmlscan(projectPath string) {
 	scanFileArr = filter(scanFileArr, filterMybatisFiles)
 
 	for _,path  := range scanFileArr{
-		log.Println(path)
 		//KeyWordParse(, path)
 		mybatisXmlFile := afero.NewOsFs()
 		fileBytes,err := afero.ReadFile(mybatisXmlFile, path)
