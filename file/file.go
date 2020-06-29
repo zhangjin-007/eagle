@@ -1,6 +1,7 @@
 package file
 
 import (
+	"fmt"
 	"log"
 	"github.com/spf13/afero"
 	"os"
@@ -57,8 +58,8 @@ func Xmlscan(projectPath string) {
 		fileLineMap := BuildFileLineMap(fileContent)
 		//关键字收集日志
 		logInfoList = append(logInfoList, KeyWordParse(fileLineMap, path)...)
-		log.Println(logInfoList)
 	}
+	fmt.Println(logInfoList)
 }
 
 /**
