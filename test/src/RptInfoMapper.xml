@@ -15,12 +15,12 @@
   </resultMap>
   <sql id="Base_Column_List">
     rpt_id, box_id, rpt_attr_json, rpt_name, rpt_desc, create_time, create_user, upd_time, 
-    upd_user, del_flag
+    upd_user, del_flag using
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from rpt_info
+    from rpt_info union
     where rpt_id = #{rptId,jdbcType=BIGINT}
   </select>
 

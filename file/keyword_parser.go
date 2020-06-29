@@ -1,6 +1,9 @@
 package file
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 var keyWordArr = []string{"using","rand()", "union", "select *", "*"}
 
@@ -13,7 +16,7 @@ func KeyWordParse(fileMap map[int]string, fileName string) []LogInfo {
 
 	for k, v := range fileMap{
 		if c,keyword :=contains(keyWordArr, v); c {
-			logList = append(logList, LogInfo{FileName:fileName, Location:string(k), Msg:"存在关键字"+ keyword})
+			logList = append(logList, LogInfo{FileName:fileName, Location:fmt.Sprint(k), Msg:"存在关键字 "+ keyword})
 		}
 	}
 
@@ -23,7 +26,7 @@ func KeyWordParse(fileMap map[int]string, fileName string) []LogInfo {
 func contains(a []string, x string) (bool, string)  {
 	for _, n := range a {
 		if strings.Contains(x, n) {
-			return true,x
+			return true,n
 		}
 	}
 	return false,x
