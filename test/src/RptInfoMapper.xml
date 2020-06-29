@@ -27,13 +27,16 @@
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from rpt_info
-    where rpt_id = #{rptId,jdbcType=BIGINT}
+    where rpt_id = (select id from a)
   </delete>
   <insert id="insert" parameterType="com.yzf.octopus.beans.report.design.RptInfo">
     insert into rpt_info (rpt_id, box_id, rpt_attr_json, 
       rpt_name, rpt_desc, create_time, 
       create_user, upd_time, upd_user, 
       del_flag)
+
+    (select id
+    from a)
     values (#{rptId,jdbcType=BIGINT}, #{boxId,jdbcType=BIGINT}, #{rptAttrJson,jdbcType=VARCHAR},
       #{rptName,jdbcType=VARCHAR}, #{rptDesc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=BIGINT}, #{updTime,jdbcType=TIMESTAMP}, #{updUser,jdbcType=BIGINT}, 

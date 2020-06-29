@@ -1,9 +1,8 @@
 package file
 
 import (
-	"fmt"
-	"log"
 	"github.com/spf13/afero"
+	"log"
 	"os"
 	"strings"
 )
@@ -57,8 +56,14 @@ func Xmlscan(projectPath string) {
 		fileLineMap := BuildFileLineMap(fileContent)
 		//关键字收集日志
 		logInfoList = append(logInfoList, KeyWordParse(fileLineMap, path)...)
+
+		subQuerySqlList := FileFindAllSubqueryString(fileContent)
+		logInfoList = append(logInfoList, RegxParse(fileLineMap, path)...)
+		if len(subQuerySqlList) > 0{
+			logInfoList = append(logInfoList, LogInfo{fileContent, "",
+				`包含如下的子查询sql` + strings.Join(subQuerySqlList[:],"/n")})
+		}
 	}
-	fmt.Println(logInfoList)
 }
 
 /**
