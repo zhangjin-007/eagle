@@ -1,10 +1,12 @@
 package file
 
 import (
+	"fmt"
 	"github.com/spf13/afero"
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
 /**
@@ -25,6 +27,9 @@ var logInfoList []LogInfo
 
 //执行xml文件的扫描 walk 方法使用RegexpFs
 func Xmlscan(projectPath string) {
+	start := time.Now()
+	fmt.Println("🚀🚀🚀", "welocme eagle!")
+	fmt.Println("🚀🚀🚀", "start project scan")
 	appfs := afero.NewOsFs()
 	var err = afero.Walk(appfs, projectPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -60,14 +65,26 @@ func Xmlscan(projectPath string) {
 		subQuerySqlList := FileFindAllSubqueryString(fileContent)
 		logInfoList = append(logInfoList, RegxParse(fileLineMap, path)...)
 		if len(subQuerySqlList) > 0{
-			logInfoList = append(logInfoList, LogInfo{fileContent, "",
-				`包含如下的子查询sql` + strings.Join(subQuerySqlList[:],"/n")})
+			logInfoList = append(logInfoList, LogInfo{path, "",
+				"存在如下的子查询sql\n" + strings.Join(subQuerySqlList[:],"\n")})
 		}
 	}
+
+	if len(logInfoList) == 0{
+		fmt.Println("😀扫描项目里面未发现异常sql")
+		return
+	}
+	for _, log := range logInfoList{
+		fmt.Println("😂", log.FormatLog())
+	}
+
+	cost := time.Since(start)
+	fmt.Println("🏁🏁🏁", "project scan finished!")
+	fmt.Println("🏁🏁🏁", "time cost "+ cost.String())
 }
 
 /**
-过滤操作mybatis的文件🚀
+过滤操作mybatis的文件
 */
 func filterMybatisFiles(filePath string) bool {
 	appfs := afero.NewOsFs()

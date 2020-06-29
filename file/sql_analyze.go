@@ -14,5 +14,9 @@ type LogInfo struct {
 
 //日志格式，是不是格式都放在这里维护
 func (log *LogInfo) FormatLog() string {
-	return "文件: " + log.FileName + " " + "第" +log.Location + "行 " + log.Msg
+	if(len(log.Location) >0 ) {
+		return "文件: " + log.FileName + " " + "第" +log.Location + "行 " + log.Msg
+	}else {
+		return "文件: " + log.FileName + " " + log.Msg
+	}
 }
