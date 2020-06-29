@@ -32,12 +32,8 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "eagle",
 	Short: "scan java project for mybtais xml file ",
-	Long: `🚀🚀🚀 A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Long: `🚀🚀🚀 Considering the limitations of vitess on SQL syntax
+, scan the xml file,this tool reminds some wrong SQL syntax in advance..`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Args: func(cmd *cobra.Command, args []string) error {
@@ -72,7 +68,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.demo.yaml)")
+	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.demo.yaml)")
 	rootCmd.Flags().StringVar(&cfgFile, "path", "", "eagle start location")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
