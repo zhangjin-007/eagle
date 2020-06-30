@@ -140,6 +140,9 @@ func TestFileReadDir(t *testing.T)  {
 	// using the function
 	mydir, _ := os.Getwd()
 	fmt.Println(mydir)
+	fmt.Println("regexp execute error")
 }
+
+
 
 
