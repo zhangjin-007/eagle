@@ -16,3 +16,11 @@
 3. 查看`egale -h` 列出所有的帮助提示命令
 ![image](img/WX20200630-161524.png)
 
+### build 
+
+1. 当前目录打包，生成可执行文件 执行`go build`
+2. 然后再配置环境变量
+`export PATH=$PATH:/Users/zhangjin/Project/eagle`
+3. 全局使用
+4. 构建linux下可执行文件
+ `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build eagle.go`
